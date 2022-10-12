@@ -7,9 +7,19 @@ const Create: React.FC = () => {
 
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [rating, setRating] = useState<number>(0);
-  const [price, setPrice] = useState<number>(0);
+  const [rating, setRating] = useState<number | string>(0);
+  const [price, setPrice] = useState<number | string>(0);
   const [formError, setFormError] = useState<string | null>(null);
+  const [locationsAvailableAt, setLocationsAvailableAt] = useState<string[] | string>([]);
+
+  // fn to convert string of comma separated values to array
+  const convertStringToArray = (str: string) => {
+    return str.split(',').map((item) => {
+      // uppercase first letter of each word
+      const capitalized = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();
+      return capitalized.trim();
+    });
+  };
 
   // fired when user clicks submit button
   // needs to create a new item in the snacks table
@@ -39,9 +49,9 @@ const Create: React.FC = () => {
     // error is the error message - if unsuccessful
     const { data, error } = await supabase
       .from('snacks') // table name
-      .insert([{ title, description, rating, price }]) // insert a new row, is represented as an array of objects
-      .select(); 
-			
+      .insert([{ title, description, rating, price, locationsAvailableAt }]) // insert a new row, is represented as an array of objects
+      .select();
+
     if (error) {
       console.log(error);
       setFormError('Please fill in all the fields correctly.');
@@ -57,16 +67,44 @@ const Create: React.FC = () => {
     <div className="page create">
       <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
-        <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)}
+        />
 
         <label htmlFor="description">description:</label>
-        <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.currentTarget.value)}
+        />
 
         <label htmlFor="rating">Rating:</label>
-        <input type="number" id="rating" value={rating} onChange={(e) => setRating(parseInt(e.target.value))} />
+        <input
+          type="number"
+          id="rating"
+          value={rating}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => setRating(e.currentTarget.value)}
+        />
 
-        <label htmlFor="rating">Price:</label>
-        <input type="number" id="price" value={price} onChange={(e) => setPrice(parseInt(e.target.value))} />
+        <label htmlFor="price">Price:</label>
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => setPrice(e.currentTarget.value)}
+        />
+
+        <label htmlFor="locationsAvailableAt">Available At:</label>
+        <input
+          type="text"
+          id="locationsAvailableAt"
+          value={locationsAvailableAt}
+          onChange={(e) => setLocationsAvailableAt(convertStringToArray(e.currentTarget.value))}
+          placeholder="Comma separated values"
+        />
 
         <button>Create New Snack</button>
 
