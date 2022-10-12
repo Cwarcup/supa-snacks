@@ -2,7 +2,10 @@
 
 :root {
   --primary: #3ECF8F;
-  --secondary: CF488B;
+  --secondary: #CF488B;
+  --darkerSecondary: #82345B;
+  --lighterSecondary: #F2A6B8;
+  --tertiary: #CF7734;
 }
 
 h1,
@@ -62,16 +65,28 @@ nav h1 {
 
 .snack-card .rating {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #fff;
-  padding: 5px 10px;
+  top: -10px;
+  right: -10px;
+  background: var(--secondary);
+  color: #fff;
   border-radius: 6px;
-  font-size: 0.8rem;
+  width: 40px;
+  height: 0;
+  padding: 20px 0;
+  line-height: 0px;
+  text-align: center;
+  font-size: 0.9rem
+}
+
+.snack-card .rating:hover {
+  background: var(--tertiary);
+  transform: scale(1.1);
+  transition: all 0.2s ease-in-out;
+
 }
 
 .snack-card .price {
   font-size: 20px;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--secondary);
 }
