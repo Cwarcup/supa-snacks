@@ -6,7 +6,7 @@ interface SnackCardProps {
   snack: SnackType;
 }
 
-const snackCard = ({ snack }: SnackCardProps): JSX.Element => {
+const SnackCard: React.FC<SnackCardProps> = ({ snack }) => {
   return (
     <div className="snack-card">
       <h3>{snack.title}</h3>
@@ -22,4 +22,4 @@ const snackCard = ({ snack }: SnackCardProps): JSX.Element => {
   );
 };
 
-export default snackCard;
+export default SnackCard;
