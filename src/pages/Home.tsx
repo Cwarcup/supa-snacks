@@ -1,14 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import { SnackType } from '../types/snackType';
+import supabase from '../config/supabaseClient';
 
 const Home: React.FC = () => {
-  // store the snacks
-  const [snacks, setSnacks] = useState(null);
-  // error message
-  const [fetchError, setFetchError] = useState(null);
+  const [snacks, setSnacks] = useState<SnackType[] | null>(null);
+
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // fetch data from supabase once
+    const fetchSnacks = async () => {
+      const { data, error } = await supabase
+        .from('snacks') // table name
+        .select(); // select all columns
+
+      if (error) {
+        console.log("Couldn't fetch snacks");
+        setFetchError(error.message);
+        setSnacks(null);
+      }
+
+      if (data) {
+        setSnacks(data);
+        setFetchError(null);
+      }
+    };
+
+    fetchSnacks(); // call the function to try to fetch data
+  }, []);
+
   return (
     <div className="page home">
-      <h2>Home</h2>
-      <p>Here are some snacks:</p>
+      {fetchError && <p className="error">{fetchError}</p>}
+      {snacks && (
+        <div className="snacks">
+          {snacks.map((snack, index) => (
+            <p key={index}>{snack.title}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
