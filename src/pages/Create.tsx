@@ -79,6 +79,7 @@ const Create: React.FC = () => {
           id="description"
           value={description}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.currentTarget.value)}
+          placeholder="A description of the snack"
         />
 
         <label htmlFor="rating">Rating:</label>

@@ -2,6 +2,7 @@
 
 :root {
   --primary: #3ECF8F;
+  --lighterPrimary: #3ecf90e5;
   --secondary: #CF488B;
   --darkerSecondary: #82345B;
   --lighterSecondary: #F2A6B8;
@@ -101,6 +102,18 @@ form {
   border-radius: 6px;
 }
 
+form input:focus {
+  outline: none !important;
+  border-color: var(--lighterPrimary);
+  box-shadow: 0 0 2px var(--lighterPrimary);
+}
+
+form textarea:focus {
+  outline: none !important;
+  border-color: var(--lighterPrimary);
+  box-shadow: 0 0 2px var(--lighterPrimary);
+}
+
 form input,
 form textarea {
   display: block;
@@ -109,6 +122,8 @@ form textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   margin: 10px 0 20px 0;
+  font-family: "Poppins";
+
 }
 
 form button {
@@ -119,4 +134,10 @@ form button {
   padding: 6px 8px;
   font-family: "Poppins";
   cursor: pointer;
+}
+
+form button:hover {
+  background: var(--lighterPrimary);
+  transition: all 0.2s ease-in-out;
+
 }
