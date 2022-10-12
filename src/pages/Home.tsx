@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { SnackType } from '../types/snackType';
 import supabase from '../config/supabaseClient';
 
+// components
+import SnackCard from '../components/snackCard';
+
 const Home: React.FC = () => {
   const [snacks, setSnacks] = useState<SnackType[] | null>(null);
 
@@ -34,9 +37,12 @@ const Home: React.FC = () => {
       {fetchError && <p className="error">{fetchError}</p>}
       {snacks && (
         <div className="snacks">
-          {snacks.map((snack, index) => (
-            <p key={index}>{snack.title}</p>
-          ))}
+          {/* order by buttons */}
+          <div className="snack-grid">
+            {snacks.map((snack, index) => (
+              <SnackCard key={index} snack={snack} />
+            ))}
+          </div>
         </div>
       )}
     </div>
