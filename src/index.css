@@ -39,3 +39,39 @@ nav h1 {
   margin: 20px auto;
   padding: 20px;
 }
+
+/* snack grid */
+.snack-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.snack-card {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.snack-card .rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.snack-card .price {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary);
+}
