@@ -5,7 +5,7 @@ export interface SnackType {
   rating: number;
   description: string;
   price: number;
-  locationAvailableAt: string;
+  locationsAvailableAt: string;
 }
 
 export interface SnackFormType {

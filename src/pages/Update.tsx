@@ -4,6 +4,8 @@ import { SnackFormType } from '../types/snackType';
 import supabase from '../config/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import convertStringToArray from '../utils/convertStringToArray';
+import { useQuery } from '@tanstack/react-query';
+import fetchSingleSnackId from '../fetcher/fetchSingleSnackId';
 
 const Update: React.FC = () => {
   const navigate = useNavigate();
@@ -46,34 +48,70 @@ const Update: React.FC = () => {
     navigate('/');
   };
 
-  useEffect(() => {
-    const fetchSnack = async () => {
-      // use supabase to fetch the data
-      const { data, error } = await supabase
-        .from('snacks') // table
-        .select() // select all columns
-        .eq('id', id) // where id = id
-        .single(); // only return one row
+  // useEffect(() => {
+  //   const fetchSnack = async () => {
+  //     // use supabase to fetch the data
+  //     const { data, error } = await supabase
+  //       .from('snacks') // table
+  //       .select() // select all columns
+  //       .eq('id', id) // where id = id
+  //       .single(); // only return one row
 
-      if (error) {
-        console.log(error);
-        navigate('/', { replace: true }); // redirect to home page and replace the current page in the history
-      }
+  //     if (error) {
+  //       console.log(error);
+  //       navigate('/', { replace: true }); // redirect to home page and replace the current page in the history
+  //     }
 
-      if (data) {
-        setSnack({
-          title: data.title,
-          description: data.description,
-          rating: data.rating,
-          price: data.price,
-          locationsAvailableAt: data.locationsAvailableAt,
-        });
-      }
-    };
+  //     if (data) {
+  //       setSnack({
+  //         title: data.title,
+  //         description: data.description,
+  //         rating: data.rating,
+  //         price: data.price,
+  //         locationsAvailableAt: data.locationsAvailableAt,
+  //       });
+  //     }
+  //   };
 
-    // invoke the function
-    fetchSnack();
-  }, [id, navigate]);
+  //   // invoke the function
+  //   fetchSnack();
+  // }, [id, navigate]);
+
+  // use react-query to fetch the data
+  const { data, isError, isLoading } = useQuery(['fetchSingleSnackId', id], () => fetchSingleSnackId(id), {
+    onSuccess: (data) => {
+      setSnack({
+        title: data.title,
+        description: data.description,
+        rating: data.rating,
+        price: data.price,
+        locationsAvailableAt: data.locationsAvailableAt,
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+      navigate('/', { replace: true }); // redirect to home page and replace the current page in the history
+    },
+  });
+
+  console.log('snackData', data);
+
+  if (isLoading) {
+    return (
+      <div className="page update">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="page update">
+        <h2>Error loading the snack</h2>
+        <p>Sorry 😢</p>
+      </div>
+    );
+  }
 
   return (
     <div className="page update">
