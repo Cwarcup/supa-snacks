@@ -16,6 +16,33 @@ const Update: React.FC = () => {
   const [rating, setRating] = useState<number | string>(0);
   const [price, setPrice] = useState<number | string>(0);
   const [locationsAvailableAt, setLocationsAvailableAt] = useState<string[] | string>([]);
+  const [formError, setFormError] = useState<string | null>('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // check we have valid values
+    if (!title || !description || !rating || !price || !locationsAvailableAt) {
+      setFormError('Please fill out all fields');
+      return;
+    }
+
+    // send request to update snack in database
+    const { data, error } = await supabase
+      .from('snacks')
+      .update({ title, description, rating, price, locationsAvailableAt })
+      .eq('id', id) // only update the snack with the id that matches the id in the url
+      .select();
+
+    if (error) {
+      setFormError(error.message);
+      return;
+    }
+
+    // redirect to home page if no errors
+    setFormError(null);
+    navigate('/');
+  };
 
   useEffect(() => {
     const fetchSnack = async () => {
@@ -46,7 +73,7 @@ const Update: React.FC = () => {
 
   return (
     <div className="page update">
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input
           type="text"
@@ -85,6 +112,8 @@ const Update: React.FC = () => {
         />
 
         <button>Update Snack</button>
+
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   );
