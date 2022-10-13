@@ -82,9 +82,24 @@ const Update: React.FC = () => {
     );
   }
 
+  const handleDelete = async () => {
+    const { error } = await supabase
+      .from('snacks')
+      .delete()
+      .eq('id', id) // where id = snack.id
+      .select();
+
+    if (error) {
+      console.log(error);
+    }
+
+    // redirect to home page
+    navigate('/');
+  };
+
   return (
     <div className="page update">
-      <form onSubmit={handleSubmit}>
+      <form className="forms-update" onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input
           type="text"
@@ -147,7 +162,14 @@ const Update: React.FC = () => {
           placeholder="Comma separated values"
         />
 
-        <button>Update Snack</button>
+        <div className="btn-container">
+          <button>Update Snack</button>
+          <button>
+            <i className="material-icons" onClick={handleDelete}>
+              delete
+            </i>
+          </button>
+        </div>
 
         {formError && <p className="error">{formError}</p>}
       </form>

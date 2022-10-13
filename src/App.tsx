@@ -10,6 +10,8 @@ import Update from './pages/Update';
 
 const queryClient = new QueryClient();
 
+
+
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
