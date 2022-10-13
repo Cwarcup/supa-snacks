@@ -10,19 +10,21 @@ const Update: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  // used to pre-populate the form with the snack's current values
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [rating, setRating] = useState<number | string>(0);
-  const [price, setPrice] = useState<number | string>(0);
-  const [locationsAvailableAt, setLocationsAvailableAt] = useState<string[] | string>([]);
   const [formError, setFormError] = useState<string | null>('');
+
+  const [snack, setSnack] = useState<SnackFormType>({
+    title: '',
+    description: '',
+    rating: 0,
+    price: 0,
+    locationsAvailableAt: [],
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // check we have valid values
-    if (!title || !description || !rating || !price || !locationsAvailableAt) {
+    if (!snack.title || !snack.description || !snack.rating || !snack.price) {
       setFormError('Please fill out all fields');
       return;
     }
@@ -30,7 +32,7 @@ const Update: React.FC = () => {
     // send request to update snack in database
     const { data, error } = await supabase
       .from('snacks')
-      .update({ title, description, rating, price, locationsAvailableAt })
+      .update({ ...snack })
       .eq('id', id) // only update the snack with the id that matches the id in the url
       .select();
 
@@ -59,11 +61,13 @@ const Update: React.FC = () => {
       }
 
       if (data) {
-        setTitle(data.title);
-        setDescription(data.description);
-        setRating(data.rating);
-        setPrice(data.price);
-        setLocationsAvailableAt(data.locationsAvailableAt);
+        setSnack({
+          title: data.title,
+          description: data.description,
+          rating: data.rating,
+          price: data.price,
+          locationsAvailableAt: data.locationsAvailableAt,
+        });
       }
     };
 
@@ -78,36 +82,61 @@ const Update: React.FC = () => {
         <input
           type="text"
           id="title"
-          value={title}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)}
+          value={snack.title}
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setSnack({
+              ...snack,
+              title: e.currentTarget.value,
+            })
+          }
         />
         <label htmlFor="description">description:</label>
         <textarea
           id="description"
-          value={description}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.currentTarget.value)}
+          value={snack.description}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setSnack({
+              ...snack,
+              description: e.currentTarget.value,
+            })
+          }
           placeholder="A description of the snack"
         />
         <label htmlFor="rating">Rating:</label>
         <input
           type="number"
           id="rating"
-          value={rating}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => setRating(e.currentTarget.value)}
+          value={snack.rating}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSnack({
+              ...snack,
+              rating: e.currentTarget.value,
+            })
+          }
         />
         <label htmlFor="price">Price:</label>
         <input
           type="number"
           id="price"
-          value={price}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => setPrice(e.currentTarget.value)}
+          value={snack.price}
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setSnack({
+              ...snack,
+              price: e.currentTarget.value,
+            })
+          }
         />
         <label htmlFor="locationsAvailableAt">Available At:</label>
         <input
           type="text"
           id="locationsAvailableAt"
-          value={locationsAvailableAt}
-          onChange={(e) => setLocationsAvailableAt(convertStringToArray(e.currentTarget.value))}
+          value={snack.locationsAvailableAt}
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setSnack({
+              ...snack,
+              locationsAvailableAt: convertStringToArray(e.currentTarget.value),
+            })
+          }
           placeholder="Comma separated values"
         />
 
