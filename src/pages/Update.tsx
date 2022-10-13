@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { SnackFormType } from '../types/snackType';
 import supabase from '../config/supabaseClient';
@@ -32,7 +32,7 @@ const Update: React.FC = () => {
     }
 
     // send request to update snack in database
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('snacks')
       .update({ ...snack })
       .eq('id', id) // only update the snack with the id that matches the id in the url
@@ -48,37 +48,8 @@ const Update: React.FC = () => {
     navigate('/');
   };
 
-  // useEffect(() => {
-  //   const fetchSnack = async () => {
-  //     // use supabase to fetch the data
-  //     const { data, error } = await supabase
-  //       .from('snacks') // table
-  //       .select() // select all columns
-  //       .eq('id', id) // where id = id
-  //       .single(); // only return one row
-
-  //     if (error) {
-  //       console.log(error);
-  //       navigate('/', { replace: true }); // redirect to home page and replace the current page in the history
-  //     }
-
-  //     if (data) {
-  //       setSnack({
-  //         title: data.title,
-  //         description: data.description,
-  //         rating: data.rating,
-  //         price: data.price,
-  //         locationsAvailableAt: data.locationsAvailableAt,
-  //       });
-  //     }
-  //   };
-
-  //   // invoke the function
-  //   fetchSnack();
-  // }, [id, navigate]);
-
   // use react-query to fetch the data
-  const { data, isError, isLoading } = useQuery(['fetchSingleSnackId', id], () => fetchSingleSnackId(id), {
+  const { isError, isLoading } = useQuery(['fetchSingleSnackId', id], () => fetchSingleSnackId(id), {
     onSuccess: (data) => {
       setSnack({
         title: data.title,
@@ -93,8 +64,6 @@ const Update: React.FC = () => {
       navigate('/', { replace: true }); // redirect to home page and replace the current page in the history
     },
   });
-
-  console.log('snackData', data);
 
   if (isLoading) {
     return (
