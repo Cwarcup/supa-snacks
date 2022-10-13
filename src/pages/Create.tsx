@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../config/supabaseClient';
+import convertStringToArray from '../utils/convertStringToArray';
 
 const Create: React.FC = () => {
   const navigate = useNavigate();
@@ -11,15 +12,6 @@ const Create: React.FC = () => {
   const [price, setPrice] = useState<number | string>(0);
   const [formError, setFormError] = useState<string | null>(null);
   const [locationsAvailableAt, setLocationsAvailableAt] = useState<string[] | string>([]);
-
-  // fn to convert string of comma separated values to array
-  const convertStringToArray = (str: string) => {
-    return str.split(',').map((item) => {
-      // uppercase first letter of each word
-      const capitalized = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();
-      return capitalized.trim();
-    });
-  };
 
   // fired when user clicks submit button
   // needs to create a new item in the snacks table
