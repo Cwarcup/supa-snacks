@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   //react-query to fetch data
   const { data: snacks, isLoading, isError, refetch } = useQuery(['fetchAllSnacks'], supabaseQuery);
 
-  const handleClick = (cb: any) => {
+  const handleClick = (cb: string) => {
     setOrderBy(cb);
     refetch();
   };
@@ -46,13 +46,33 @@ const Home: React.FC = () => {
       {snacks && (
         <div className="snacks">
           <div className="order-by">
-            <p>Order by:</p>
-            <button onClick={() => handleClick('created_at')}>Time Created</button>
-            <button onClick={() => handleClick('title')}>Title</button>
-            <button onClick={() => handleClick('rating')}>Rating</button>
-            <button onClick={() => handleClick('price')}>Price</button>
-            {orderBy}
+            <label>Order by: </label>
+            <button
+              style={{ backgroundColor: orderBy === 'created_at' ? 'var(--primary)' : 'var(--secondary)' }}
+              onClick={() => handleClick('created_at')}
+            >
+              Time Created
+            </button>
+            <button
+              style={{ backgroundColor: orderBy === 'title' ? 'var(--primary)' : 'var(--secondary)' }}
+              onClick={() => handleClick('title')}
+            >
+              Title
+            </button>
+            <button
+              style={{ backgroundColor: orderBy === 'rating' ? 'var(--primary)' : 'var(--secondary)' }}
+              onClick={() => handleClick('rating')}
+            >
+              Rating
+            </button>
+            <button
+              style={{ backgroundColor: orderBy === 'price' ? 'var(--primary)' : 'var(--secondary)' }}
+              onClick={() => handleClick('price')}
+            >
+              Price
+            </button>
           </div>
+
           <div className="snack-grid">
             {snacks.map((snack, index) => (
               <SnackCard key={index} snack={snack} />
