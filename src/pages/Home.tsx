@@ -6,15 +6,23 @@ import { useQuery } from '@tanstack/react-query';
 import SnackCard from '../components/snackCard';
 
 const Home: React.FC = () => {
-  // use react-query to fetch data
-  const {
-    data: snacks,
-    isLoading,
-    isError,
-  } = useQuery(['fetchAllSnacks'], async () => {
-    const { data } = await supabase.from('snacks').select();
+  // used to change the order of the snacks
+  const [orderBy, setOrderBy] = useState('created_at');
+
+  // fetch snacks query from supabase
+  const supabaseQuery = async () => {
+    const { data, error } = await supabase.from('snacks').select().order(orderBy, { ascending: true });
+    if (error) throw error;
     return data;
-  });
+  };
+
+  //react-query to fetch data
+  const { data: snacks, isLoading, isError, refetch } = useQuery(['fetchAllSnacks'], supabaseQuery);
+
+  const handleClick = (cb: any) => {
+    setOrderBy(cb);
+    refetch();
+  };
 
   if (isLoading) {
     return (
@@ -37,6 +45,14 @@ const Home: React.FC = () => {
     <div className="page home">
       {snacks && (
         <div className="snacks">
+          <div className="order-by">
+            <p>Order by:</p>
+            <button onClick={() => handleClick('created_at')}>Time Created</button>
+            <button onClick={() => handleClick('title')}>Title</button>
+            <button onClick={() => handleClick('rating')}>Rating</button>
+            <button onClick={() => handleClick('price')}>Price</button>
+            {orderBy}
+          </div>
           <div className="snack-grid">
             {snacks.map((snack, index) => (
               <SnackCard key={index} snack={snack} />

@@ -7,6 +7,7 @@ interface SnackCardProps {
 }
 
 const SnackCard: React.FC<SnackCardProps> = ({ snack }) => {
+
   return (
     <div className="snack-card">
       <h3>{snack.title}</h3>
