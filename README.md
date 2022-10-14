@@ -2,6 +2,8 @@
 
 This project is a simple web application that allows users to create, edit, and delete snacks. 
 
+Check it out here: https://supa-snacks.vercel.app/
+
 It served as a learning tool for me to learn how to use the following technologies:
 
 - [TypeScript](https://www.typescriptlang.org/)
